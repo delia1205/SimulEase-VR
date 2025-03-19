@@ -8,6 +8,7 @@
 UserSettings/
 MemoryCaptures/
 # Visual Studio
+.vs/
 .vscode/
 *.csproj
 *.sln
