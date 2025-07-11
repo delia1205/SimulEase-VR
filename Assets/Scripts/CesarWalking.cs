@@ -10,6 +10,7 @@ public class CesarWalking : MonoBehaviour
 
     private void Start()
     {
+        SetDelayTimesBasedOnDifficulty();
         gameObject.SetActive(false);
         float randomDelay = Random.Range(minTime, maxTime);
         Invoke("AppearAndAnimate", randomDelay);
@@ -29,6 +30,30 @@ public class CesarWalking : MonoBehaviour
     {
         CancelInvoke("PlayFootstepSound");
         gameObject.SetActive(false);
+    }
+
+    void SetDelayTimesBasedOnDifficulty()
+    {
+        string difficulty = PlayerPrefs.GetString("SelectedDifficulty", "Beginner");
+
+        switch (difficulty)
+        {
+            case "Beginner":
+                minTime = 180f;
+                maxTime = 360f;
+                break;
+            case "Mid":
+                minTime = 120f;
+                maxTime = 180f;
+                break;
+            case "Advanced":
+                minTime = 60f;
+                maxTime = 120f;
+                break;
+            default:
+                Debug.LogWarning("Unknown difficulty: " + difficulty);
+                break;
+        }
     }
 }
 

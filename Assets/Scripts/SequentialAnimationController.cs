@@ -7,22 +7,47 @@ public class SequentialAnimationController : MonoBehaviour
     [Tooltip("Assign all the animation GameObjects in the correct sequence")]
     public List<GameObject> animationSteps;
 
-    [Tooltip("Minimum random idle time before stand up starts (seconds)")]
+    [Tooltip("Minimum random idle time before sequence starts (seconds)")]
     public float minIdleTime = 2f;
 
-    [Tooltip("Maximum random idle time before stand up starts (seconds)")]
+    [Tooltip("Maximum random idle time before sequence starts (seconds)")]
     public float maxIdleTime = 6f;
 
+    public AudioSource audioSource;
+    public AudioClip audioLoopClip;
 
     void Start()
     {
+        SetIdleTimesBasedOnDifficulty();
         StartCoroutine(PlayAnimationSequence());
     }
+
+    void StartAudio()
+    {
+        if (audioSource != null && audioLoopClip != null)
+        {
+            audioSource.clip = audioLoopClip;
+            audioSource.loop = true;
+            audioSource.Play();
+        }
+    }
+
+    void StopAudio()
+    {
+        if (audioSource != null && audioSource.isPlaying)
+        {
+            audioSource.Stop();
+            audioSource.loop = false;
+        }
+    }
+
 
     IEnumerator PlayAnimationSequence()
     {
         float idleTime = Random.Range(minIdleTime, maxIdleTime);
         yield return new WaitForSeconds(idleTime);
+
+        StartAudio();
 
         foreach (GameObject obj in animationSteps)
         {
@@ -43,6 +68,8 @@ public class SequentialAnimationController : MonoBehaviour
 
             obj.SetActive(false);
         }
+
+        StopAudio();
     }
 
     AnimationClip GetCurrentAnimationClip(Animator animator)
@@ -51,5 +78,29 @@ public class SequentialAnimationController : MonoBehaviour
         if (rac == null || rac.animationClips.Length == 0) return null;
 
         return rac.animationClips[0];
+    }
+
+    void SetIdleTimesBasedOnDifficulty()
+    {
+        string difficulty = PlayerPrefs.GetString("SelectedDifficulty", "Beginner");
+
+        switch (difficulty)
+        {
+            case "Beginner":
+                minIdleTime = 360f;
+                maxIdleTime = 480f;
+                break;
+            case "Mid":
+                minIdleTime = 240f;
+                maxIdleTime = 300f;
+                break;
+            case "Advanced":
+                minIdleTime = 120f;
+                maxIdleTime = 240f;
+                break;
+            default:
+                Debug.LogWarning("Unknown difficulty: " + difficulty);
+                break;
+        }
     }
 }

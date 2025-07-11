@@ -16,6 +16,7 @@ public class SoundManager : MonoBehaviour
 
     private void Start()
     {
+        SetDelaysBasedOnDifficulty();
         StartCoroutine(PlayRandomSoundsLoop());
         Vector3 planeScale = planeObject.transform.localScale;
         audienceAreaSize = new Vector3(10f * planeScale.x, 1f, 10f * planeScale.z);
@@ -69,5 +70,29 @@ public class SoundManager : MonoBehaviour
     {
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireCube(audienceAreaCenter, audienceAreaSize);
+    }
+
+    void SetDelaysBasedOnDifficulty()
+    {
+        string difficulty = PlayerPrefs.GetString("SelectedDifficulty", "Beginner");
+
+        switch (difficulty)
+        {
+            case "Beginner":
+                minDelay = 30f;
+                maxDelay = 60f;
+                break;
+            case "Mid":
+                minDelay = 10f;
+                maxDelay = 15f;
+                break;
+            case "Advanced":
+                minDelay = 3f;
+                maxDelay = 10f;
+                break;
+            default:
+                Debug.LogWarning("Unknown difficulty: " + difficulty);
+                break;
+        }
     }
 }

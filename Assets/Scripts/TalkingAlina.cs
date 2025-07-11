@@ -21,7 +21,7 @@ public class TalkingAlina : MonoBehaviour
         new VisemeBlendshape { name = "V_Wide", maxWeight = 100f },
         new VisemeBlendshape { name = "V_Affricate", maxWeight = 100f },
         new VisemeBlendshape { name = "V_Lip_Open", maxWeight = 100f },
-        new VisemeBlendshape { name = "Mouth_Funnel", maxWeight = 25f }
+        new VisemeBlendshape { name = "Mouth_Funnel", maxWeight = 40f }
     };
 
     public float minInterval = 0.05f;

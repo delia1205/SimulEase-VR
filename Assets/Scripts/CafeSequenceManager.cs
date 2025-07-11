@@ -14,6 +14,7 @@ public class CafeSequenceManager : MonoBehaviour
 
     void Start()
     {
+        ApplyDifficultySettings();
         StartCoroutine(SequenceLoop());
     }
 
@@ -39,11 +40,33 @@ public class CafeSequenceManager : MonoBehaviour
         }
     }
 
-    // TODO: add weights to some sequences that are more probable to happen
-
     CafeAnimationSequence GetRandomSequence()
     {
         if (sequences.Count == 0) return null;
         return sequences[Random.Range(0, sequences.Count)];
+    }
+
+    void ApplyDifficultySettings()
+    {
+        string difficulty = PlayerPrefs.GetString("SelectedDifficulty", "Beginner");
+
+        switch (difficulty)
+        {
+            case "Beginner":
+                minIdleTime = 240f;
+                maxIdleTime = 300f;
+                break;
+            case "Mid":
+                minIdleTime = 180f;
+                maxIdleTime = 240f;
+                break;
+            case "Advanced":
+                minIdleTime = 120f;
+                maxIdleTime = 180f;
+                break;
+            default:
+                Debug.LogWarning("Unknown difficulty level, using default idle times.");
+                break;
+        }
     }
 }
